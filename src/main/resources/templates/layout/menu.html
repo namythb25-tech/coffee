@@ -6,21 +6,23 @@
 
         <ul th:if="${currentRole == 'Quản lý'}">
             <li><a th:href="@{/home}">Dashboard</a></li>
-            <li><a th:href="@{/employees}">Nhân viên</a></li>
-            <li><a href="#">Bàn</a></li>
-            <li><a href="#">Thực đơn</a></li>
-            <li><a href="#">Hóa đơn</a></li>
-            <li><a href="#">Khuyến mãi</a></li>
-            <li><a href="#">Kho hàng</a></li>
-            <li><a href="#">Thiết bị</a></li>
-            <li><a href="#">Chi tiêu</a></li>
-            <li><a href="#">Báo cáo</a></li>
+            <li><a th:href="@{/profile}">Trang cá nhân</a></li>
+            <li><a th:href="@{/employees}">Quản lý Nhân viên</a></li>
+            <li><a href="#">Quản lý bán hàng</a></li>
+            <li><a href="#">Quản lý trang thiết bị</a></li>
+            <li><a href="#">Quản lý kho hàng</a></li>
+            <li><a href="#">Quản lý thực đơn</a></li>
+            <li><a href="#">Quản lý Marketing</a></li>
+            <li><a href="#">Quản lý ngân sách</a></li>
+            <li><a href="#">Quản lý dữ liệu</a></li>
+            <li><a href="#">Thống kê, Báo cáo</a></li>
         </ul>
 
         <ul th:if="${currentRole != 'Quản lý'}">
             <li><a th:href="@{/home}">Dashboard</a></li>
-            <li><a href="#">Bàn</a></li>
-            <li><a href="#">Hóa đơn</a></li>
+            <li><a th:href="@{/profile}">Trang cá nhân</a></li>
+            <li><a href="#">Quản lý bán hàng</a></li>
+
         </ul>
 
         <hr>

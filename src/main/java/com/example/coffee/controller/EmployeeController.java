@@ -39,7 +39,7 @@ public class EmployeeController {
         if (!laQuanLy(session)) {
             return chanQuyen(model, session);
         }
-        addFormData(model, session, nhanVienService.taoFormMoi(), "Thêm nhân viên", true);
+        addFormData(model, session, nhanVienService.taoFormMoi(), "Thêm nhân viên", true, "/employees");
         return "employees/form";
     }
 
@@ -51,7 +51,7 @@ public class EmployeeController {
         }
         nhanVienService.kiemTraTaiKhoan(form, true, bindingResult);
         if (bindingResult.hasErrors()) {
-            addFormData(model, session, form, "Thêm nhân viên", true);
+            addFormData(model, session, form, "Thêm nhân viên", true, "/employees");
             return "employees/form";
         }
         try {
@@ -59,7 +59,7 @@ public class EmployeeController {
             redirectAttributes.addFlashAttribute("success", "Thêm nhân viên thành công.");
             return "redirect:/employees";
         } catch (IllegalArgumentException ex) {
-            addFormData(model, session, form, "Thêm nhân viên", true);
+            addFormData(model, session, form, "Thêm nhân viên", true, "/employees");
             model.addAttribute("error", ex.getMessage());
             return "employees/form";
         }
@@ -67,11 +67,11 @@ public class EmployeeController {
 
     @GetMapping("/employees/{id}/edit")
     public String editForm(@PathVariable Integer id, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
-        if (!laQuanLy(session)) {
+        if (!duocSuaNhanVien(session, id)) {
             return chanQuyen(model, session);
         }
         try {
-            addFormData(model, session, nhanVienService.taoFormSua(id), "Sửa nhân viên", false);
+            addFormData(model, session, nhanVienService.taoFormSua(id), "Sửa nhân viên", false, "/employees/" + id);
             return "employees/form";
         } catch (IllegalArgumentException ex) {
             redirectAttributes.addFlashAttribute("error", ex.getMessage());
@@ -82,21 +82,21 @@ public class EmployeeController {
     @PostMapping("/employees/{id}")
     public String update(@PathVariable Integer id, @Valid @ModelAttribute("employeeForm") NhanVienForm form,
             BindingResult bindingResult, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
-        if (!laQuanLy(session)) {
+        if (!duocSuaNhanVien(session, id)) {
             return chanQuyen(model, session);
         }
         if (bindingResult.hasErrors()) {
             form.setMaNhanVien(id);
-            addFormData(model, session, form, "Sửa nhân viên", false);
+            addFormData(model, session, form, "Sửa nhân viên", false, "/employees/" + id);
             return "employees/form";
         }
         try {
             nhanVienService.sua(id, form);
             redirectAttributes.addFlashAttribute("success", "Cập nhật nhân viên thành công.");
-            return "redirect:/employees";
+            return laQuanLy(session) ? "redirect:/employees" : "redirect:/profile";
         } catch (IllegalArgumentException ex) {
             form.setMaNhanVien(id);
-            addFormData(model, session, form, "Sửa nhân viên", false);
+            addFormData(model, session, form, "Sửa nhân viên", false, "/employees/" + id);
             model.addAttribute("error", ex.getMessage());
             return "employees/form";
         }
@@ -116,7 +116,7 @@ public class EmployeeController {
         return "redirect:/employees";
     }
 
-    private void addFormData(Model model, HttpSession session, NhanVienForm form, String pageTitle, boolean createMode) {
+    private void addFormData(Model model, HttpSession session, NhanVienForm form, String pageTitle, boolean createMode, String formAction) {
         addSession(model, session);
         model.addAttribute("pageTitle", pageTitle);
         model.addAttribute("employeeForm", form);
@@ -127,6 +127,14 @@ public class EmployeeController {
     private boolean laQuanLy(HttpSession session) {
         return session.getAttribute(AuthController.CURRENT_USER_ID) != null
                 && "Quản lý".equals(session.getAttribute(AuthController.CURRENT_ROLE));
+    }
+
+    private boolean duocSuaNhanVien(HttpSession session, Integer maNhanVien) {
+        Integer maTaiKhoan = (Integer) session.getAttribute(AuthController.CURRENT_USER_ID);
+        if (maTaiKhoan == null) {
+            return false;
+        }
+        return laQuanLy(session) || maNhanVien.equals(nhanVienService.layMaNhanVienTheoTaiKhoan(maTaiKhoan));
     }
 
     private String chanQuyen(Model model, HttpSession session) {

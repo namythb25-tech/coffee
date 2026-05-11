@@ -58,6 +58,10 @@ public class NhanVienService {
         return form;
     }
 
+    public Integer layMaNhanVienTheoTaiKhoan(Integer maTaiKhoan) {
+        return layTheoTaiKhoan(maTaiKhoan).getMaNhanVien();
+    }
+
     @Transactional
     public void them(NhanVienForm form) {
         NhanVien nhanVien = new NhanVien();
@@ -113,6 +117,11 @@ public class NhanVienService {
         if (isBlank(form.getMatKhau())) {
             bindingResult.rejectValue("matKhau", "matKhau.required", "Vui lòng nhập mật khẩu.");
         }
+    }
+
+    private NhanVien layTheoTaiKhoan(Integer maTaiKhoan) {
+        return nhanVienRepository.findByTaiKhoan_MaTaiKhoan(maTaiKhoan)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy thông tin nhân viên của tài khoản đang đăng nhập."));
     }
 
     private boolean isBlank(String value) {

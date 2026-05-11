@@ -6,5 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface NhanVienRepository extends JpaRepository<NhanVien, Integer> {
     List<NhanVien> findByHoTenContainingIgnoreCaseOrSoDienThoaiContainingIgnoreCase(String hoTen, String soDienThoai);
+    java.util.Optional<NhanVien> findByTaiKhoan_MaTaiKhoan(Integer maTaiKhoan);
 }
 
