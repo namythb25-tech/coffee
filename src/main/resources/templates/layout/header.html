@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <header th:fragment="header">
+        <h2>Coffee Shop Management</h2>
+        <p>
+            Xin chào: <strong th:text="${currentUsername}">user</strong>
+            <span th:if="${currentRole}"> - Quyền: <strong th:text="${currentRole}">role</strong></span>
+        </p>
+        <p><a id="header-logout" th:href="@{/logout}">Đăng xuất</a></p>
+        <hr>
+    </header>
+</body>
+</html>

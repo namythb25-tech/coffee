@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle}">Nhân viên</title>
+</head>
+
+<body>
+    <div th:replace="~{layout/header :: header}"></div>
+    <div th:replace="~{layout/menu :: menu}"></div>
+
+    <main>
+        <section aria-labelledby="employee-form-title">
+            <h1 id="employee-form-title" th:text="${pageTitle}">Nhân viên</h1>
+
+            <form id="employee-form"
+                th:action="${createMode} ? @{/employees} : @{/employees/{id}(id=${employeeForm.maNhanVien})}"
+                th:object="${employeeForm}" method="post">
+                <div>
+                    <label for="hoTen">Họ tên</label>
+                    <input id="hoTen" type="text" th:field="*{hoTen}" maxlength="30" required>
+                    <p th:if="${#fields.hasErrors('hoTen')}" th:errors="*{hoTen}">Lỗi họ tên</p>
+                </div>
+
+                <div>
+                    <label for="diaChi">Địa chỉ</label>
+                    <input id="diaChi" type="text" th:field="*{diaChi}" maxlength="50">
+                    <p th:if="${#fields.hasErrors('diaChi')}" th:errors="*{diaChi}">Lỗi địa chỉ</p>
+                </div>
+
+                <div>
+                    <label for="soDienThoai">Số điện thoại</label>
+                    <input id="soDienThoai" type="text" th:field="*{soDienThoai}" maxlength="15" required>
+                    <p th:if="${#fields.hasErrors('soDienThoai')}" th:errors="*{soDienThoai}">Lỗi số điện thoại</p>
+                </div>
+
+                <div>
+                    <label for="maChucVu">Chức vụ</label>
+                    <select id="maChucVu" th:field="*{maChucVu}" required>
+                        <option value="">-- Chọn chức vụ --</option>
+                        <option th:each="chucVu : ${chucVus}" th:value="${chucVu.maChucVu}"
+                            th:text="${chucVu.tenChucVu + ' - Lương: ' + chucVu.luong}">Chức vụ</option>
+                    </select>
+                    <p th:if="${#fields.hasErrors('maChucVu')}" th:errors="*{maChucVu}">Lỗi chức vụ</p>
+                </div>
+
+                <fieldset th:if="${createMode}">
+                    <legend>Tài khoản</legend>
+
+                    <div>
+                        <label for="taoTaiKhoan">Tạo tài khoản</label>
+                        <input id="taoTaiKhoan" type="checkbox" th:field="*{taoTaiKhoan}">
+                    </div>
+
+                    <div>
+                        <label for="tenDangNhap">Tên đăng nhập</label>
+                        <input id="tenDangNhap" type="text" th:field="*{tenDangNhap}" maxlength="20">
+                        <p th:if="${#fields.hasErrors('tenDangNhap')}" th:errors="*{tenDangNhap}">Lỗi tên đăng nhập</p>
+                    </div>
+
+                    <div>
+                        <label for="matKhau">Mật khẩu</label>
+                        <input id="matKhau" type="password" th:field="*{matKhau}" maxlength="20">
+                        <p th:if="${#fields.hasErrors('matKhau')}" th:errors="*{matKhau}">Lỗi mật khẩu</p>
+                    </div>
+
+                    <div>
+                        <label for="quyenHan">Quyền hạn</label>
+                        <select id="quyenHan" th:field="*{quyenHan}">
+                            <option value="Nhân viên">Nhân viên</option>
+                            <option value="Quản lý">Quản lý</option>
+                        </select>
+                    </div>
+                </fieldset>
+
+                <div>
+                    <span>Image</span>
+                    <span id="employee-image-placeholder">Hình ảnh đại diện của người dùng</span>
+                </div>
+
+                <button id="save-employee-button" type="submit" th:text="${createMode} ? 'Thêm' : 'Lưu'">Lưu</button>
+                <a id="cancel-employee-link" th:href="@{/employees}">Hủy</a>
+            </form>
+        </section>
+    </main>
+</body>
+
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle}">Đăng nhập</title>
+</head>
+<body>
+    <main>
+        <section aria-labelledby="login-title">
+            <h1 id="login-title">Đăng nhập</h1>
+            <p>Nhập tài khoản để vào hệ thống quản lý quán cà phê.</p>
+
+            <p th:if="${error}" th:text="${error}" role="alert"></p>
+
+            <form id="login-form" th:action="@{/login}" th:object="${loginRequest}" method="post">
+                <div>
+                    <label for="tenDangNhap">Tên đăng nhập</label>
+                    <input id="tenDangNhap" type="text" th:field="*{tenDangNhap}" required autofocus>
+                </div>
+
+                <div>
+                    <label for="matKhau">Mật khẩu</label>
+                    <input id="matKhau" type="password" th:field="*{matKhau}" required>
+                </div>
+
+                <button id="login-button" type="submit">Đăng nhập</button>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle}">Quản lý nhân viên</title>
+</head>
+<body>
+    <div th:replace="~{layout/header :: header}"></div>
+    <div th:replace="~{layout/menu :: menu}"></div>
+
+    <main>
+        <section aria-labelledby="employees-title">
+            <h1 id="employees-title">Quản lý nhân viên</h1>
+
+            <form id="employee-search-form" th:action="@{/employees}" method="get">
+                <label for="keyword">Search Box</label>
+                <input id="keyword" type="text" name="keyword" maxlength="20" th:value="${keyword}">
+                <button id="search-employee-button" type="submit">Tìm kiếm</button>
+            </form>
+
+            <p><a id="new-employee-link" th:href="@{/employees/new}">Thêm nhân viên</a></p>
+
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Mã NV</th>
+                        <th>Họ tên</th>
+                        <th>Số điện thoại</th>
+                        <th>Địa chỉ</th>
+                        <th>Chức vụ</th>
+                        <th>Lương</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="employee : ${employees}">
+                        <td th:text="${employee.maNhanVien}">1</td>
+                        <td th:text="${employee.hoTen}">Nguyễn Văn A</td>
+                        <td th:text="${employee.soDienThoai}">090...</td>
+                        <td th:text="${employee.diaChi}">Hà Nội</td>
+                        <td th:text="${employee.chucVu.tenChucVu}">Nhân viên</td>
+                        <td th:text="${employee.chucVu.luong}">0</td>
+                        <td>
+                            <a th:id="${'edit-employee-' + employee.maNhanVien}" th:href="@{/employees/{id}/edit(id=${employee.maNhanVien})}">Sửa</a>
+                            <form th:id="${'delete-employee-form-' + employee.maNhanVien}" th:action="@{/employees/{id}/delete(id=${employee.maNhanVien})}" method="post">
+                                <button th:id="${'delete-employee-' + employee.maNhanVien}" type="submit">Xóa</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(employees)}">
+                        <td colspan="7">Không có kết quả tìm kiếm.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+</body>
+</html>

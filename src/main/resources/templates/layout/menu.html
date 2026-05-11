@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <nav th:fragment="menu">
+        <h2>Menu</h2>
+
+        <ul th:if="${currentRole == 'Quản lý'}">
+            <li><a th:href="@{/home}">Dashboard</a></li>
+            <li><a th:href="@{/employees}">Nhân viên</a></li>
+            <li><a href="#">Bàn</a></li>
+            <li><a href="#">Thực đơn</a></li>
+            <li><a href="#">Hóa đơn</a></li>
+            <li><a href="#">Khuyến mãi</a></li>
+            <li><a href="#">Kho hàng</a></li>
+            <li><a href="#">Thiết bị</a></li>
+            <li><a href="#">Chi tiêu</a></li>
+            <li><a href="#">Báo cáo</a></li>
+        </ul>
+
+        <ul th:if="${currentRole != 'Quản lý'}">
+            <li><a th:href="@{/home}">Dashboard</a></li>
+            <li><a href="#">Bàn</a></li>
+            <li><a href="#">Hóa đơn</a></li>
+        </ul>
+
+        <hr>
+    </nav>
+</body>
+</html>
